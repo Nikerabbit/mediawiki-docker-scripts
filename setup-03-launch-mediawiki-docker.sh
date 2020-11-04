@@ -36,16 +36,30 @@ EOF
 
 # Should have some skin to make it less ugly
 git clone "https://gerrit.wikimedia.org/r/mediawiki/skins/Vector" skins/Vector
-tee -a LocalSettings.php <<'EOF'
-
-wfLoadSkin( 'Vector' );
-EOF
-
 git clone "https://gerrit.wikimedia.org/r/mediawiki/extensions/Elastica" extensions/Elastica
 git clone "https://gerrit.wikimedia.org/r/mediawiki/extensions/Translate" extensions/Translate
 git clone "https://gerrit.wikimedia.org/r/mediawiki/extensions/UniversalLanguageSelector" extensions/UniversalLanguageSelector
-tee -a LocalSettings.php <<'EOF'
 
+tee composer.local.json <<'EOF'
+{
+	"extra": {
+		"merge-plugin": {
+			"include": [
+			"extensions/Elastica/composer.json",
+			"extensions/Translate/composer.json"
+			]
+		}
+	}
+}
+EOF
+
+docker-compose up -d
+docker-compose exec mediawiki composer update
+docker-compose exec mediawiki /bin/bash /docker/install.sh
+
+# This has to be after install
+tee -a LocalSettings.php <<'EOF'
+wfLoadSkin( 'Vector' );
 wfLoadExtensions( 'Elastica', 'Translate', 'UniversalLanguageSelector' );
 $wgTranslateTranslationServices['TTMServer'] = [
 	'type' => 'ttmserver',
@@ -67,20 +81,3 @@ $wgGroupPermissions['sysop']['translate-manage'] = true;
 $wgTranslateDocumentationLanguageCode = 'qqq';
 
 EOF
-
-tee composer.local.json <<'EOF
-{
-	"extra": {
-		"merge-plugin": {
-			"include": [
-			"extensions/Elastica/composer.json",
-			"extensions/Translate/composer.json"
-			]
-		}
-	}
-}
-EOF
-
-docker-compose up -d
-docker-compose exec mediawiki composer update
-docker-compose exec mediawiki /bin/bash /docker/install.sh
