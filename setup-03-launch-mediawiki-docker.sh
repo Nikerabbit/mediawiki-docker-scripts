@@ -66,11 +66,9 @@ $wgTranslateTranslationServices['TTMServer'] = [
 	'class' => 'ElasticSearchTTMServer',
 	'cutoff' => 0.75,
 	'public' => true,
-	'config' => [ 'elasticsearch' ],
+	'config' => [ 'servers' => [ [ 'host' => 'elasticsearch', 'port' => 9200 ] ] ],
 	'timeout' => 8,
 	'use_wikimedia_extra' => true,
-	'shards' => 1,
-	'replicas' => 0,
 ];
 $wgGroupPermissions['user']['translate'] = true;
 $wgGroupPermissions['user']['translate-messagereview'] = true;
@@ -83,3 +81,4 @@ $wgTranslateDocumentationLanguageCode = 'qqq';
 EOF
 
 docker-compose exec mediawiki php maintenance/update.php --quick
+docker-compose exec mediawiki php extensions/Translate/scripts/ttmserver-export.php
