@@ -9,4 +9,4 @@ sudo usermod -aG docker $USER
 cp $SCRIPT /home/$USER
 sudo chown $USER:$USER /home/$USER/$SCRIPT
 cd /home/$USER
-sudo -u $USER ./$SCRIPT
+sudo -su $USER
