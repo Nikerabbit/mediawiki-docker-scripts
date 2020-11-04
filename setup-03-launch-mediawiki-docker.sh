@@ -45,8 +45,8 @@ tee composer.local.json <<'EOF'
 	"extra": {
 		"merge-plugin": {
 			"include": [
-			"extensions/Elastica/composer.json",
-			"extensions/Translate/composer.json"
+				"extensions/Elastica/composer.json",
+				"extensions/Translate/composer.json"
 			]
 		}
 	}
