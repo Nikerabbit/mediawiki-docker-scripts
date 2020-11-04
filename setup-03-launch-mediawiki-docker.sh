@@ -60,7 +60,7 @@ docker-compose exec mediawiki /bin/bash /docker/install.sh
 # This has to be after install
 tee -a LocalSettings.php <<'EOF'
 wfLoadSkin( 'Vector' );
-wfLoadExtensions( 'Elastica', 'Translate', 'UniversalLanguageSelector' );
+wfLoadExtensions( [ 'Elastica', 'Translate', 'UniversalLanguageSelector' ] );
 $wgTranslateTranslationServices['TTMServer'] = [
 	'type' => 'ttmserver',
 	'class' => 'ElasticSearchTTMServer',
@@ -81,3 +81,5 @@ $wgGroupPermissions['sysop']['translate-manage'] = true;
 $wgTranslateDocumentationLanguageCode = 'qqq';
 
 EOF
+
+docker-compose exec mediawiki php maintenance/update.php --quick
