@@ -21,6 +21,8 @@ services:
   mediawiki:
     # On Linux, these lines ensure file ownership is set to your host user/group
     user: "${MW_DOCKER_UID}:${MW_DOCKER_GID}"
+  mediawiki-web:
+    user: "${MW_DOCKER_UID}:${MW_DOCKER_GID}"
   elasticsearch:
     image: docker-registry.wikimedia.org/dev/stretch-elasticsearch:0.0.1
     volumes:
